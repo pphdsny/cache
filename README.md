@@ -127,7 +127,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.pphdsny:cache:1.0.0'
+    implementation 'com.github.pphdsny:cache:1.0.1'
 }
 ```
 
