@@ -1,6 +1,7 @@
 package com.pp.cache.impl;
 
-import com.pp.lib.cache.impl.MemoryCache;
+import com.pp.cache.model.PPCacheModel;
+import com.pphdsny.lib.cache.impl.AssetCache;
 import com.pphdsny.lib.cache.util.CacheUtil;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ import rx.Observable;
 /**
  * Created by wangpeng on 2018/7/6.
  */
-public class AssetInvalidCache extends MemoryCache {
+public class AssetInvalidCache extends AssetCache<PPCacheModel> {
 
     @Override
     protected Observable getDataImpl(Map params, Class dataClass) {

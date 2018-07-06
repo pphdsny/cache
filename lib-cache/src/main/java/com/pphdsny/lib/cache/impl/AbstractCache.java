@@ -1,8 +1,8 @@
 package com.pphdsny.lib.cache.impl;
 
 import com.google.gson.Gson;
-import com.pp.lib.cache.protocal.ICache;
-import com.pp.lib.cache.protocal.ICacheParams;
+import com.pphdsny.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.protocal.ICacheParams;
 import com.pphdsny.lib.cache.util.CacheUtil;
 
 import java.util.Map;

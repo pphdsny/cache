@@ -3,9 +3,8 @@ package com.pp.cache.model;
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
 
-import com.pp.cache.model.PPCacheModel;
-import com.pp.lib.cache.protocal.ICache;
-import com.pp.lib.cache.protocal.ICacheParams;
+import com.pphdsny.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.protocal.ICacheParams;
 
 import java.util.Map;
 

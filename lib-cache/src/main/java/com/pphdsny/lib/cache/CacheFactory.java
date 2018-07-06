@@ -1,7 +1,7 @@
 package com.pphdsny.lib.cache;
 
-import com.pp.lib.cache.protocal.ICache;
-import com.pp.lib.cache.protocal.ICacheParams;
+import com.pphdsny.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.protocal.ICacheParams;
 
 import rx.Observable;
 

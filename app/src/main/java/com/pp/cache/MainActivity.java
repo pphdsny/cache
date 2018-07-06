@@ -13,15 +13,18 @@ import com.pp.cache.impl.PPMemoryInvalidCache;
 import com.pp.cache.impl.PPNetCache;
 import com.pp.cache.impl.PPNetInvalidCache;
 import com.pp.cache.model.PPCacheModel;
-import com.pp.lib.cache.CacheFactory;
-import com.pp.lib.cache.impl.AssetCache;
-import com.pp.lib.cache.impl.LocalCache;
-import com.pp.lib.cache.impl.MemoryCache;
-import com.pp.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.CacheFactory;
+import com.pphdsny.lib.cache.impl.AssetCache;
+import com.pphdsny.lib.cache.impl.LocalCache;
+import com.pphdsny.lib.cache.impl.MemoryCache;
+import com.pphdsny.lib.cache.impl.NetCache;
+import com.pphdsny.lib.cache.protocal.ICache;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import rx.Observable;
 import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -93,7 +96,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cacheArr[i] = cacheList.get(i);
         }
 
-        CacheFactory cacheFactory = new CacheFactory(cacheArr);
+//        CacheFactory cacheFactory = new CacheFactory(cacheArr);
+        CacheFactory cacheFactory = new CacheFactory(
+                new MemoryCache(),
+                new NetCache() {
+                    @Override
+                    protected Observable getDataImpl(Map params, Class dataClass) {
+                        return null;
+                    }
+                },
+                new LocalCache(),
+                new AssetCache()
+        );
         cacheFactory.requestCache(ppCacheParams)
                 .subscribe(new Action1<PPCacheModel>() {
                     @Override
