@@ -128,6 +128,8 @@ allprojects {
 
 dependencies {
     implementation 'com.github.pphdsny:cache:1.0.1'
+    implementation 'io.reactivex:rxjava:1.2.2'
+    implementation 'com.google.code.gson:gson:2.6.2'
 }
 ```
 
