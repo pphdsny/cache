@@ -1,4 +1,3 @@
-[![](https://jitpack.io/v/dongjunkun/DropDownMenu.svg)](https://jitpack.io/#dongjunkun/DropDownMenu)
 # 构建灵活的缓存机制
 
 ## 前言
