@@ -2,7 +2,7 @@ package com.pp.cache.impl;
 
 import com.pp.cache.model.PPCacheModel;
 import com.pp.lib.cache.impl.NetCache;
-import com.pp.lib.cache.util.CacheUtil;
+import com.pphdsny.lib.cache.util.CacheUtil;
 
 import java.util.Map;
 

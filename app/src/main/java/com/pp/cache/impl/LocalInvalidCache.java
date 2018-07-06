@@ -1,7 +1,7 @@
 package com.pp.cache.impl;
 
 import com.pp.lib.cache.impl.MemoryCache;
-import com.pp.lib.cache.util.CacheUtil;
+import com.pphdsny.lib.cache.util.CacheUtil;
 
 import java.util.Map;
 

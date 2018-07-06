@@ -1,4 +1,4 @@
-package com.pp.lib.cache;
+package com.pphdsny.lib.cache;
 
 import com.pp.lib.cache.protocal.ICache;
 import com.pp.lib.cache.protocal.ICacheParams;

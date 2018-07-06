@@ -1,9 +1,9 @@
-package com.pp.lib.cache.impl;
+package com.pphdsny.lib.cache.impl;
 
 import android.text.TextUtils;
 
-import com.pp.lib.cache.util.CacheUtil;
-import com.pp.lib.cache.util.GlobalMemoryCache;
+import com.pphdsny.lib.cache.util.CacheUtil;
+import com.pphdsny.lib.cache.util.GlobalMemoryCache;
 
 import java.util.Map;
 
