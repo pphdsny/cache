@@ -23,7 +23,7 @@
 
 ## 顺一顺实现
 
-![Cahce](/Users/wangpeng/Documents/学习/随笔/Cahce.png)
+![Cahce](https://upload-images.jianshu.io/upload_images/2014593-be408e81987c0db1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700)
 
 ##简要说明
 
