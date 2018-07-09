@@ -24,10 +24,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.github.pphdsny:cache:1.0.1'
-
-    implementation 'io.reactivex:rxjava:1.2.2'
     implementation 'com.google.code.gson:gson:2.6.2'
-//    api project(':lib-cache')
+    implementation 'io.reactivex:rxjava:1.2.2'
+
+    api project(':lib-cache')
+//    implementation 'com.github.pphdsny:cache:1.0.1'
+
 
 }

@@ -2,6 +2,8 @@ package com.pphdsny.lib.cache.impl;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.pphdsny.lib.cache.protocal.ICacheParams;
 import com.pphdsny.lib.cache.util.CacheUtil;
 import com.pphdsny.lib.cache.util.GlobalMemoryCache;
 
@@ -12,11 +14,13 @@ import rx.Observable;
 /**
  * Created by wangpeng on 2018/6/28.
  * 内存缓存
- * 设置了缓存key{@link ICache#MEMORY_KEY}则默认开启内存缓存，不同业务逻辑子类可复写
+ * 设置了缓存key{@link com.pphdsny.lib.cache.protocal.ECache#MEMORY_KEY}则默认开启内存缓存，不同业务逻辑子类可复写
  */
 public class MemoryCache<T> extends AbstractCache<T> {
+
     @Override
-    protected Observable<T> getDataImpl(Map params, Class<T> dataClass) {
+    protected Observable<T> getDataImpl(ICacheParams<T> cacheParams) {
+        Map<String, Object> params = cacheParams.getParams();
         String cacheKey = CacheUtil.getMemoryCacheKey(params);
         if (params == null || TextUtils.isEmpty(cacheKey)) {
             return CacheUtil.error("未开启内存缓存");
@@ -27,7 +31,7 @@ public class MemoryCache<T> extends AbstractCache<T> {
         }
         T t = null;
         try {
-            t = fromJson(params, cacheValue, dataClass);
+            t = fromJson(params, cacheValue, cacheParams.getDataClass());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,4 +41,9 @@ public class MemoryCache<T> extends AbstractCache<T> {
         return Observable.just(t);
     }
 
+    @Override
+    protected void saveDataIml(ICacheParams<T> cacheParams, T t) {
+        Map<String, Object> params = cacheParams.getParams();
+        CacheUtil.updateMemoryCache(CacheUtil.getMemoryCacheKey(params), new Gson().toJson(t));
+    }
 }

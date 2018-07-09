@@ -1,6 +1,9 @@
 package com.pphdsny.lib.cache.impl;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
+import com.pphdsny.lib.cache.protocal.ECache;
 import com.pphdsny.lib.cache.protocal.ICache;
 import com.pphdsny.lib.cache.protocal.ICacheParams;
 import com.pphdsny.lib.cache.util.CacheUtil;
@@ -20,7 +23,7 @@ public abstract class AbstractCache<T> implements ICache<T> {
         if (cacheParams == null) {
             return CacheUtil.error("cacheParms object is null");
         }
-        Map params = cacheParams.getParams();
+        Map<String, Object> params = cacheParams.getParams();
         if (params == null) {
             return CacheUtil.error("cacheParms.getParams() return null");
         }
@@ -28,7 +31,26 @@ public abstract class AbstractCache<T> implements ICache<T> {
         if (dataClass == null) {
             return CacheUtil.error("cacheParms.getDataClass() return null");
         }
-        return getDataImpl(params, cacheParams.getDataClass());
+        return getDataImpl(cacheParams);
+    }
+
+    @Override
+    public void saveData(ICacheParams<T> cacheParams, T t) {
+        if (cacheParams == null) {
+            Log.e(ECache.TAG, "cacheParms object is null");
+            return;
+        }
+        Map<String, Object> params = cacheParams.getParams();
+        if (params == null) {
+            Log.e(ECache.TAG, "cacheParms.getParams() return null");
+            return;
+        }
+        Class<T> dataClass = cacheParams.getDataClass();
+        if (dataClass == null) {
+            Log.e(ECache.TAG, "cacheParms.getDataClass() return null");
+            return;
+        }
+        saveDataIml(cacheParams, t);
     }
 
     /**
@@ -49,5 +71,8 @@ public abstract class AbstractCache<T> implements ICache<T> {
         return t;
     }
 
-    protected abstract Observable<T> getDataImpl(Map params, Class<T> dataClass);
+    protected abstract Observable<T> getDataImpl(ICacheParams<T> cacheParams);
+
+    protected abstract void saveDataIml(ICacheParams<T> cacheParams, T t);
+
 }

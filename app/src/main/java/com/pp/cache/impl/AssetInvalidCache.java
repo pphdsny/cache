@@ -2,9 +2,8 @@ package com.pp.cache.impl;
 
 import com.pp.cache.model.PPCacheModel;
 import com.pphdsny.lib.cache.impl.AssetCache;
+import com.pphdsny.lib.cache.protocal.ICacheParams;
 import com.pphdsny.lib.cache.util.CacheUtil;
-
-import java.util.Map;
 
 import rx.Observable;
 
@@ -14,7 +13,7 @@ import rx.Observable;
 public class AssetInvalidCache extends AssetCache<PPCacheModel> {
 
     @Override
-    protected Observable getDataImpl(Map params, Class dataClass) {
+    protected Observable<PPCacheModel> getDataImpl(ICacheParams<PPCacheModel> cacheParams) {
         return CacheUtil.error("直接报错，无效Asset缓存");
     }
 }

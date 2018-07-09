@@ -3,7 +3,7 @@ package com.pp.cache.model;
 import android.content.Context;
 import android.support.v4.util.ArrayMap;
 
-import com.pphdsny.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.protocal.ECache;
 import com.pphdsny.lib.cache.protocal.ICacheParams;
 
 import java.util.Map;
@@ -24,13 +24,13 @@ public class PPCacheParams implements ICacheParams<PPCacheModel> {
     public Map getParams() {
         ArrayMap<Object, Object> map = new ArrayMap<>();
         //开启内存缓存，不写默认不存
-        map.put(ICache.MEMORY_KEY, "pp_memory_key");
+        map.put(ECache.MEMORY_KEY, "pp_memory_key");
         //开启本地缓存，不写默认不存
-        map.put(ICache.LOCAL_KEY, "pp_local_key");
+        map.put(ECache.LOCAL_KEY, "pp_local_key");
         //开启Asset缓存，不写默认不存，注意key是Asset中的文件名称
-        map.put(ICache.ASSET_KEY, "AssetCache.json");
+        map.put(ECache.ASSET_KEY, "AssetCache.json");
         //注意，如果要使用本地缓存，必须要设置context
-        map.put(ICache.CONTEXT_KEY, context);
+        map.put(ECache.CONTEXT_KEY, context);
         //也可以放一些自定义的业务参数
         map.put("id", 111);
         return map;
@@ -39,5 +39,10 @@ public class PPCacheParams implements ICacheParams<PPCacheModel> {
     @Override
     public Class<PPCacheModel> getDataClass() {
         return PPCacheModel.class;
+    }
+
+    @Override
+    public long getExpityTime() {
+        return 0;
     }
 }

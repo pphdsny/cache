@@ -8,23 +8,20 @@ import android.widget.Button;
 
 import com.pp.cache.databinding.ActivityMainBinding;
 import com.pp.cache.impl.AssetInvalidCache;
-import com.pp.cache.model.PPCacheParams;
 import com.pp.cache.impl.PPMemoryInvalidCache;
 import com.pp.cache.impl.PPNetCache;
 import com.pp.cache.impl.PPNetInvalidCache;
 import com.pp.cache.model.PPCacheModel;
+import com.pp.cache.model.PPCacheParams;
 import com.pphdsny.lib.cache.CacheFactory;
 import com.pphdsny.lib.cache.impl.AssetCache;
 import com.pphdsny.lib.cache.impl.LocalCache;
 import com.pphdsny.lib.cache.impl.MemoryCache;
-import com.pphdsny.lib.cache.impl.NetCache;
 import com.pphdsny.lib.cache.protocal.ICache;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import rx.Observable;
 import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -90,29 +87,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void clickSure() {
-        PPCacheParams ppCacheParams = new PPCacheParams(this);
+        final PPCacheParams ppCacheParams = new PPCacheParams(this);
         ICache<PPCacheModel>[] cacheArr = new ICache[cacheList.size()];
         for (int i = 0; i < cacheList.size(); i++) {
             cacheArr[i] = cacheList.get(i);
         }
 
-//        CacheFactory cacheFactory = new CacheFactory(cacheArr);
-        CacheFactory cacheFactory = new CacheFactory(
-                new MemoryCache(),
-                new NetCache() {
-                    @Override
-                    protected Observable getDataImpl(Map params, Class dataClass) {
-                        return null;
-                    }
-                },
-                new LocalCache(),
-                new AssetCache()
-        );
-        cacheFactory.requestCache(ppCacheParams)
+        final CacheFactory cacheFactory = new CacheFactory(cacheArr);
+//        final CacheFactory cacheFactory = new CacheFactory(
+//                new MemoryCache(),
+//                new LocalCache(),
+//                new AssetCache()
+//        );
+        cacheFactory.getData(ppCacheParams)
                 .subscribe(new Action1<PPCacheModel>() {
                     @Override
                     public void call(PPCacheModel ppCacheModel) {
                         binding.tvContent.append("执行正确----" + ppCacheModel.toString() + "\n");
+                        cacheFactory.saveData(ppCacheParams, ppCacheModel);
                     }
                 }, new Action1<Throwable>() {
                     @Override

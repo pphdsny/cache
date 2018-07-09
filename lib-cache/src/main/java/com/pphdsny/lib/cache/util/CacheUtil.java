@@ -3,7 +3,7 @@ package com.pphdsny.lib.cache.util;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.pphdsny.lib.cache.protocal.ICache;
+import com.pphdsny.lib.cache.protocal.ECache;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,11 +28,11 @@ public class CacheUtil {
         if (params == null) {
             return "";
         }
-        if (params.containsKey(ICache.MEMORY_KEY)) {
-            return params.get(ICache.MEMORY_KEY).toString();
+        if (params.containsKey(ECache.MEMORY_KEY)) {
+            return params.get(ECache.MEMORY_KEY).toString();
         }
-        if (params.containsKey(ICache.CACHE_KEY)) {
-            return params.get(ICache.CACHE_KEY).toString();
+        if (params.containsKey(ECache.CACHE_KEY)) {
+            return params.get(ECache.CACHE_KEY).toString();
         }
         return "";
     }
@@ -47,11 +47,11 @@ public class CacheUtil {
         if (params == null) {
             return "";
         }
-        if (params.containsKey(ICache.LOCAL_KEY)) {
-            return params.get(ICache.LOCAL_KEY).toString();
+        if (params.containsKey(ECache.LOCAL_KEY)) {
+            return params.get(ECache.LOCAL_KEY).toString();
         }
-        if (params.containsKey(ICache.CACHE_KEY)) {
-            return params.get(ICache.CACHE_KEY).toString();
+        if (params.containsKey(ECache.CACHE_KEY)) {
+            return params.get(ECache.CACHE_KEY).toString();
         }
         return "";
     }
@@ -66,11 +66,11 @@ public class CacheUtil {
         if (params == null) {
             return "";
         }
-        if (params.containsKey(ICache.ASSET_KEY)) {
-            return params.get(ICache.ASSET_KEY).toString();
+        if (params.containsKey(ECache.ASSET_KEY)) {
+            return params.get(ECache.ASSET_KEY).toString();
         }
-        if (params.containsKey(ICache.CACHE_KEY)) {
-            return params.get(ICache.CACHE_KEY).toString();
+        if (params.containsKey(ECache.CACHE_KEY)) {
+            return params.get(ECache.CACHE_KEY).toString();
         }
         return "";
     }
@@ -85,7 +85,7 @@ public class CacheUtil {
         if (params == null) {
             return null;
         }
-        Object cacheContext = params.get(ICache.CONTEXT_KEY);
+        Object cacheContext = params.get(ECache.CONTEXT_KEY);
         if (cacheContext == null || !(cacheContext instanceof Context)) {
             return null;
         }
