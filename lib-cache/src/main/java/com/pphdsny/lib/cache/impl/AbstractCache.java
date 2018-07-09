@@ -50,6 +50,9 @@ public abstract class AbstractCache<T> implements ICache<T> {
             Log.e(ECache.TAG, "cacheParms.getDataClass() return null");
             return;
         }
+        if (t == null){
+            return;
+        }
         saveDataIml(cacheParams, t);
     }
 
