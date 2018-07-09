@@ -24,7 +24,7 @@
 
 ![Cahce](https://upload-images.jianshu.io/upload_images/2014593-be408e81987c0db1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700)
 
-##简要说明
+## 简要说明
 
 -   设计思路是工厂模式和责任链模式的结合
 -   基于RxJava的数据流
@@ -116,7 +116,7 @@ public class CacheFactory<T> {
 
 ## 如何用
 
-### Gradle依赖
+### 外网Gradle依赖
 
 ```
 allprojects {
