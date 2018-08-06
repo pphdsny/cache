@@ -1,5 +1,3 @@
-# 构建灵活的缓存机制
-
 ## 前言
 
 某天，做搜索的时候，期望筛选条件的配置文件能缓存起来，不要每次都从网络获取，减少异常的发生。于是乎刷刷的开始写大量的判断逻辑if/else，做了个三级缓存，从内存、网络、本地读取数据，写完了测试也通过了，非常完美！！！
@@ -21,10 +19,9 @@
 -   需要使用时候简单便捷
 
 ## 顺一顺实现
+![image.png](https://upload-images.jianshu.io/upload_images/2014593-9db59bb04bde48b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-![Cahce](https://upload-images.jianshu.io/upload_images/2014593-be408e81987c0db1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700)
-
-## 简要说明
+##简要说明
 
 -   设计思路是工厂模式和责任链模式的结合
 -   基于RxJava的数据流
@@ -35,18 +32,21 @@
     -   网络缓存利用eTag
     -   本地缓存利用SP存储
     -   资源Asset缓存利用本地文件
--   通过CacheFactory进行缓存策略组装，基于RxJava的error捕获，将处理转到一下个cache中进行处理
+-   通过ICacheStrategy进行缓存策略组装，基于RxJava的error捕获，将处理转到一下个cache中进行处理
+    - 默认读取策略是按序处理数据
+    - 默认保存策略是全部更新
 
 ## 核心代码
 
-### ICache
-
+### ECache
 ```java
 /**
- * Created by wangpeng on 2018/6/28.
- * 全局cache的协议
+ * Created by wangpeng on 2018/7/9.
+ * Cache中用到的一些key
  */
-public interface ICache<T> {
+public interface ECache {
+
+    String TAG = "Lib-Cache";
 
     //map中cache的key
     String CACHE_KEY = "cache_key";
@@ -58,8 +58,21 @@ public interface ICache<T> {
     String ASSET_KEY = "asset_key";
     //Context对象
     String CONTEXT_KEY = "context_key";
+}
+```
+
+### ICache
+
+```java
+/**
+ * Created by wangpeng on 2018/6/28.
+ * 全局cache的协议
+ */
+public interface ICache<T> {
 
     Observable<T> getData(ICacheParams<T> cacheParams);
+
+    void saveData(ICacheParams<T> cacheParams,T t);
 }
 ```
 
@@ -72,9 +85,40 @@ public interface ICache<T> {
  */
 public interface ICacheParams<T> {
 
-    Map getParams();
+    /**
+     * 缓存带参
+     *
+     * @return
+     */
+    Map<String, Object> getParams();
 
+    /**
+     * 获取缓存需实例化的类
+     *
+     * @return
+     */
     Class<T> getDataClass();
+
+    /**
+     * 设置缓存时间，单位是ms
+     *
+     * @return
+     */
+    long getExpityTime();
+}
+```
+### ICacheStrategy
+```java
+/**
+ * Created by wangpeng on 2018/7/9.
+ * 缓存策略
+ */
+public interface ICacheStrategy<T> {
+
+    Observable<T> getDataStrategy(ICacheParams<T> cacheParams);
+
+    void saveDataStrategy(ICacheParams<T> cacheParams,T t);
+
 }
 ```
 
@@ -88,23 +132,22 @@ public interface ICacheParams<T> {
  */
 public class CacheFactory<T> {
 
-    private ICache<T>[] cacheArr;
+    private ICacheStrategy<T> cacheStrategy;
 
-    public CacheFactory(@NonNull ICache<T>... cacheArr) {
-      //缓存的执行顺序和数组一直
-        this.cacheArr = cacheArr;
+    public CacheFactory(ICache<T>... cacheArr) {
+        this.cacheStrategy = new DefaultCacheStrategy<>(cacheArr);
     }
 
-    public Observable<T> requestCache(ICacheParams<T> cacheParams) {
-        if (cacheArr == null || cacheArr.length == 0) {
-            return Observable.empty();
-        }
-        Observable<T> retObservable;
-        retObservable = cacheArr[0].getData(cacheParams);
-        for (int i = 1; i < cacheArr.length; i++) {
-            retObservable = retObservable.onErrorResumeNext(cacheArr[i].getData(cacheParams));
-        }
-        return retObservable;
+    public CacheFactory(ICacheStrategy<T> cacheStrategy) {
+        this.cacheStrategy = cacheStrategy;
+    }
+
+    public Observable<T> getData(ICacheParams<T> cacheParams) {
+        return cacheStrategy.getDataStrategy(cacheParams);
+    }
+
+    public void saveData(ICacheParams<T> cacheParams, T t) {
+        cacheStrategy.saveDataStrategy(cacheParams, t);
     }
 }
 ```
@@ -116,7 +159,7 @@ public class CacheFactory<T> {
 
 ## 如何用
 
-### 外网Gradle依赖
+### Gradle依赖
 
 ```
 allprojects {
@@ -127,7 +170,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.pphdsny:cache:1.0.1'
+    implementation 'com.github.pphdsny:cache:1.0.2'
     implementation 'io.reactivex:rxjava:1.2.2'
     implementation 'com.google.code.gson:gson:2.6.2'
 }
@@ -136,29 +179,15 @@ dependencies {
 ### 使用
 
 ```
-CacheFactory cacheFactory = new CacheFactory(
+        CacheFactory cacheFactory = new CacheFactory(new DefaultCacheStrategy(
                 new MemoryCache(),
-                new NetCache() {
-                    @Override
-                    protected Observable getDataImpl(Map params, Class dataClass) {
-                        return null;
-                    }
-                },
                 new LocalCache(),
                 new AssetCache()
-        );
-        cacheFactory.requestCache(cacheParams)
-                .subscribe(new Action1<PPCacheModel>() {
-                    @Override
-                    public void call(PPCacheModel ppCacheModel) {
-                    //执行正确
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                    //执行出错
-                    }
-                });
+        ));
+        //获取数据
+        cacheFactory.getData(cacheParams);
+        //缓存数据
+        cacheFactory.saveData(cacheParams,dataObject);
 ```
 
 更多用法详见[demo](https://github.com/pphdsny/cache/tree/master/app)
@@ -167,6 +196,4 @@ CacheFactory cacheFactory = new CacheFactory(
 
 如果你正好要做缓存，也是使用RxJava，这个方案可供参考。欢迎拍砖。
 
-### Blog地址
-
-https://www.jianshu.com/p/a9ae44869294
+源码地址：https://github.com/pphdsny/cache/
