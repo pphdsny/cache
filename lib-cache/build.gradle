@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply from: '../gradle-mvn-push.gradle'
+//apply from: '../gradle-mvn-push.gradle'
 
 android {
     compileSdkVersion 27
