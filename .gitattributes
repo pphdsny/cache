@@ -1,1 +1,3 @@
-*.html linguist-language=java
+*.gradle linguist-language=java
+*.properties linguist-language=java
+*.sh linguist-language=java
